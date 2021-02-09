@@ -21,19 +21,19 @@ def startgame():
         #hier word een list dat 4 willekeurige intergers bevat(0 tot 6) aangemaakt
         Secretcode = list(map(int, random.sample(range(0, 6), 4)))
         print(f'Dit is de code dmv random {Secretcode}')
-    algo_choice = int(input("Welk algorithme wil je gebruiken?\n0=user input, 1=Knutz, 2=simple strategy"))
+    algo_choice = int(input("Welk algorithme wil je gebruiken?\n0=user input, 1=worst case strategy, 2=simple strategy"))
     selectalgo(algo_choice)
 
 
 def selectalgo(algo_choice):
     # variable die aangeeft welk algoritme gebruikt word
     # waarde 0 = user input
-    # waarde 1 = custom algo
+    # waarde 1 = worst case strategy
     # waarde 2 = simple strategy
     if algo_choice==0:
         breakit()
     if algo_choice==1:
-        ganggang(Secretcode)
+        worstcasestrat(Secretcode)
     if algo_choice == 2:
         simplestrat(Secretcode)
 
@@ -107,7 +107,54 @@ def simplestrat(Secretcode):
 
         #de mogelijke opties  worden in de lijst geplaatst
         currentoption =[item for item in currentoption if item in checklst]
+        print(len(currentoption))
 
+
+
+def worstcasestrat(Secretcode):
+    count = 0
+    alloption = []
+    currentoption = []
+    # Loop die alle mogelijk combinaties, in lists plaatst
+    # De lists worden zo aangemaakt, dat ze gelijk gesorteerd zijn.
+    for i0 in range(0, 6):
+        for i1 in range(0, 6):
+            for i2 in range(0, 6):
+                for i3 in range(0, 6):
+                    alloption.append([i0, i1, i2, i3])
+                    currentoption.append([i0, i1, i2, i3])
+    guess = [0,0,1,1]
+    count += 1
+    feedback = pegs(guess, Secretcode, algo_choice)
+    print(f'guess: {guess} feedback:{feedback}')
+    if feedback == [4, 0]:
+        print(f'Hole in one!')
+        quit()
+
+    while True:
+        guess = currentoption[0]
+        count += 1
+        feedback = pegs(guess, Secretcode, algo_choice)
+        print(f'guess: {guess} feedback:{feedback}')
+
+        # als de feedback [4,0] is, is het algoritme klaar
+        if feedback == [4, 0]:
+            print(f'GGWP GAMER, het heeft {count} turns gekost')
+            print(f'De code was {Secretcode}.')
+            quit()
+
+        # Hier wordt een lijst gemaakt waar alle mogelijke codes worden getest tegen de guess
+        checklst = []
+        for i0 in range(0, 6):
+            for i1 in range(0, 6):
+                for i2 in range(0, 6):
+                    for i3 in range(0, 6):
+                        checksecret = [i0, i1, i2, i3]
+                        if pegs(guess, checksecret, algo_choice) == feedback:
+                            checklst.append(checksecret)
+
+        # de mogelijke opties  worden in de lijst geplaatst
+        currentoption = [item for item in currentoption if item in checklst]
 
 
 startgame()
