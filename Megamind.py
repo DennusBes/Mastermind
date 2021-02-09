@@ -28,12 +28,12 @@ def startgame():
 def selectalgo(algo_choice):
     # variable die aangeeft welk algoritme gebruikt word
     # waarde 0 = user input
-    # waarde 1 = knutz
+    # waarde 1 = custom algo
     # waarde 2 = simple strategy
     if algo_choice==0:
         breakit()
     if algo_choice==1:
-        knutz(Secretcode)
+        ganggang(Secretcode)
     if algo_choice == 2:
         simplestrat(Secretcode)
 
@@ -83,17 +83,19 @@ def simplestrat(Secretcode):
                     currentoption.append([i0, i1, i2, i3])
 
     while True:
-        #maak een gok met een willekeurige mogelijke optie
-        guess = random.choice(currentoption)
+        #maak een gok met de eerst mogelijke optie uit een gesorteerde lijst
+        guess = currentoption[0]
         count += 1
         feedback = pegs(guess, Secretcode,algo_choice)
-
         print(f'guess: {guess} feedback:{feedback}')
 
+        #als de feedback [4,0] is, is het algoritme klaar
         if feedback == [4,0]:
             print(f'GGWP GAMER, het heeft {count} turns gekost')
             print(f'De code was {guess}.')
             quit()
+
+        #Hier wordt een lijst gemaakt waar alle mogelijke codes worden getest tegen de guess
         checklst=[]
         for i0 in range(0, 6):
             for i1 in range(0, 6):
@@ -102,6 +104,8 @@ def simplestrat(Secretcode):
                         checksecret=[i0,i1,i2,i3]
                         if pegs(guess, checksecret, algo_choice)==feedback:
                             checklst.append(checksecret)
+
+        #de mogelijke opties  worden in de lijst geplaatst
         currentoption =[item for item in currentoption if item in checklst]
 
 
