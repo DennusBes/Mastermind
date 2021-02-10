@@ -152,9 +152,20 @@ def worstcasestrat(Secretcode):
                         checksecret = [i0, i1, i2, i3]
                         if pegs(guess, checksecret, algo_choice) == feedback:
                             checklst.append(checksecret)
-
         # de mogelijke opties  worden in de lijst geplaatst
         currentoption = [item for item in currentoption if item in checklst]
 
+        if len(currentoption)>1:
+            matrix=() # Dictionary waarin staat: [code],[feedback] , aantal keren dat die feedback gekregen is
+            for i in currentoption:
+                count = 0
+                for y in currentoption:
+                    tempfb = tuple(pegs(y,i,algo_choice))
+                    count += 1
+                    temptuple = tuple(i)                        #Lists mogen niet in dictionaries worden geplaatst als key, dus maak ik en tuple met de inhoud van i
+                    matrix = (temptuple,tempfb,count)
+        #kleinewaarde=min(matrix(count))
+        #uess=list[matrix(temptuple) if count==kleinewaarde]
+        print(matrix)
 
 startgame()
