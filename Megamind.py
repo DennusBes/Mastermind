@@ -170,6 +170,8 @@ def worstcasestrat(Secretcode):
             feedback = pegs(guess, Secretcode, algo_choice)
             print(f'guess: {guess} feedback:{feedback}')
         else:
-            guess=currentoption[0]
-
+            guess = currentoption[0]
+            count += 1
+            feedback = pegs(guess, Secretcode, algo_choice)
+            print(f'guess: {guess} feedback:{feedback}')
 startgame()
