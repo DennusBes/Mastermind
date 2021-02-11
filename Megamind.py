@@ -221,7 +221,15 @@ def customstrat(Secretcode):
             kleurenteller[posiblenumbas]=totalamount
         print(f'Guess {guess} feedback { feedback}')
     print(kleurenteller)
-    possibilities = [getal for getal in kleurenteller.keys()]
+    usednumbers =[]
+    while len(usednumbers) < 4:
+        for i in range (kleurenteller):
+            if kleurenteller[i] 0
+                usednumbers.append(i)
+                kleurenteller[i] -= 1
+
+    #possibilities = [getal for getal in kleurenteller.keys() ]
+    print(possibilities)
 
 
 
