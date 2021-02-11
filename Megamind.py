@@ -1,4 +1,5 @@
 # Bron 1: https://stackoverflow.com/questions/20302682/mastermind-in-python
+# Bron Levi Verhoef
 
 import random
 import time
@@ -124,6 +125,9 @@ def worstcasestrat(Secretcode):
                     alloption.append([i0, i1, i2, i3])
                     currentoption.append([i0, i1, i2, i3])
     guess = [0,0,1,1]
+    alloption.remove(guess)
+    if guess in currentoption:
+        currentoption.remove(guess)
     count += 1
     feedback = pegs(guess, Secretcode, algo_choice)
     print(f'guess: {guess} feedback:{feedback}')
@@ -132,40 +136,49 @@ def worstcasestrat(Secretcode):
         quit()
 
     while True:
+
         # als de feedback [4,0] is, is het algoritme klaar
         if feedback == [4, 0]:
             print(f'GGWP GAMER, het heeft {count} turns gekost')
-            quit()
+            with open('results.txt', "a") as f:  # append the results to a txt file, probably not in final product
+                f.write(f'{count}\n')
+                f.close()
+            break
 
         # Hier wordt een lijst gemaakt waar alle mogelijke codes worden getest tegen de guess
         checklst = []
-        for i0 in range(0, 6):
-            for i1 in range(0, 6):
-                for i2 in range(0, 6):
-                    for i3 in range(0, 6):
-                        checksecret = [i0, i1, i2, i3]
-                        if pegs(guess, checksecret, algo_choice) == feedback:
-                            checklst.append(checksecret)
+        for checksecret in currentoption:
+            if pegs(guess, checksecret, algo_choice) == feedback:
+                checklst.append(checksecret)
         # de mogelijke opties  worden in de lijst geplaatst
         currentoption = [item for item in currentoption if item in checklst]
 
-        if len(currentoption) > 1:
-            for i in currentoption:
+        if len(currentoption) > 2:
+            maxcodecount={}
+            for maybeguess in alloption:
                 matrix={}
-                counter = 0
-                for y in alloption:
-                    tempfb = tuple(pegs(y, i, algo_choice))
-                    temptuple = tuple(i)
-                    comboding = (temptuple, tempfb)
-
+                for maybesecret in currentoption:
+                    tempfb = tuple(pegs(maybeguess, maybesecret, algo_choice))
                     try:
-                        matrix[comboding] += 1
+                        matrix[tempfb] += 1
                     except:
-                        matrix[comboding] = 1
-            minikey = min(matrix, key=matrix.get)
-            minikey = list(minikey[0])
-            print(minikey)
-            guess = minikey
+                        matrix[tempfb] = 1
+
+                    maxcodecount[tuple(maybeguess)]=max(matrix.values())
+
+            minikey = min(maxcodecount.values())
+            possibilities = [ code for code in maxcodecount.keys() if maxcodecount[code] == minikey]
+
+            for posibility in possibilities:
+                if posibility in currentoption:
+                    guess = posibility
+                else:
+                    guess = possibilities[0]
+            guess = list(guess)
+            alloption.remove(guess)
+            if guess in currentoption:
+                currentoption.remove(guess)
+
             count += 1
             feedback = pegs(guess, Secretcode, algo_choice)
             print(f'guess: {guess} feedback:{feedback}')
@@ -173,5 +186,10 @@ def worstcasestrat(Secretcode):
             guess = currentoption[0]
             count += 1
             feedback = pegs(guess, Secretcode, algo_choice)
+            alloption.remove(guess)
+            if guess in currentoption:
+                currentoption.remove(guess)
             print(f'guess: {guess} feedback:{feedback}')
+
+        #print(f'Current options {currentoption}\n possibilities: { possibilities}')
 startgame()
