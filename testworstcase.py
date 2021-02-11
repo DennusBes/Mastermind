@@ -20,9 +20,9 @@ def startgame():
     #Gebruiker selecteerd optie: random generated geheime code
     elif howtocode ==1:
         #hier word een list dat 4 willekeurige intergers bevat(0 tot 6) aangemaakt
-        Secretcode = list(map(int, random.sample(range(0, 6), 4)))
+        Secretcode = [random.randint(0,5) for i in range(4)]
         print(f'Dit is de code dmv random {Secretcode}')
-    algo_choice = 1
+    algo_choice = 3
     selectalgo(algo_choice)
 
 
@@ -33,10 +33,12 @@ def selectalgo(algo_choice):
     # waarde 2 = simple strategy
     if algo_choice==0:
         breakit()
-    if algo_choice==1:
+    elif algo_choice==1:
         worstcasestrat(Secretcode)
-    if algo_choice == 2:
+    elif algo_choice == 2:
         simplestrat(Secretcode)
+    elif algo_choice == 3:
+        customstrat(Secretcode)
 
 #de gebruiker heeft gekozen om handmatig de code te kraken
 def breakit():
@@ -165,10 +167,10 @@ def worstcasestrat(Secretcode):
                         matrix[tempfb] = 1
 
                     maxcodecount[tuple(maybeguess)]=max(matrix.values())
-            print(f'{maxcodecount}')
+
             minikey = min(maxcodecount.values())
             possibilities = [ code for code in maxcodecount.keys() if maxcodecount[code] == minikey]
-            print(possibilities)
+
             for posibility in possibilities:
                 if posibility in currentoption:
                     guess = posibility
@@ -191,5 +193,79 @@ def worstcasestrat(Secretcode):
                 currentoption.remove(guess)
             print(f'guess: {guess} feedback:{feedback}')
 
-        #print(f'Current options {currentoption}\n possibilities: { possibilities}')
+def customstrat(Secretcode):
+    '''
+    Elimineer de mogelijke waardes
+    Mijn idee voor dit algoritme is als volgt:
+    1. Er wordt een rij met eendezelfde waarde als gok gebruikt.
+    2. Er word opgeslagen hoe vaak de secretcode de gegokte kleur bevat.
+    3. Ga terug naar stap 1 als er nog waardes zijn die niet zijn getest.
+    5. Er is nu feedback verkregen. De combinatie van de feedback zal zorgen voor een combinatie van gekleurde en witte pegs, waarvan er som 4 is.
+    6. Maak nu een lijst met alle mogelijk codes aan de hand van de totale feedback.
+    7. Probeer alle opties in de lijst. ( In het geval dat er 4 verschillende waardes zijn gebruikt in de code, is het totaal aantal mogelijkheden 4 * 3 * 2 * 1 = 24)
+    8. Doel bereikt. GGWP.
+    '''
+    #Ik maak een dictionary waarin staat hoevaak de key ( Waarde 0 t/m 5 ) voor komst
+    count = 0
+    kleurenteller ={}
+    for posiblenumbas in range(0,6,1):
+        totalamount=0
+        guess = [posiblenumbas,posiblenumbas,posiblenumbas,posiblenumbas]
+        count += 1
+        feedback = pegs(guess, Secretcode, algo_choice)
+        totalamount = feedback[0] + feedback[1]
+        if feedback == [4, 0]:
+            print(f'De code was vrij simpel blijkbaar. Alsnog goed gedaan hoor  :) ')
+            quit()
+        if totalamount>0:
+            kleurenteller[posiblenumbas]=totalamount
+    #print(kleurenteller)
+    usednumbers = []
+    while len(usednumbers) < 4:
+        for getal in kleurenteller:
+            if kleurenteller[getal] >=1:
+                usednumbers.append(getal)
+                kleurenteller[getal] -= 1
+
+    stage1 = []
+    stage2 = []
+    stage3 = []
+    finalboss = []
+
+    for i0 in range(len(usednumbers)):
+        tempcop = usednumbers.copy()
+        stage1 =tempcop[i0]
+        tempcop.remove(stage1)
+        for i1 in range(len(tempcop)):
+            stage2cop=tempcop.copy()
+            stage2 = stage2cop[i1]
+            stage2cop.remove(stage2)
+            for i2 in range(len(stage2cop)):
+                stage3cop = stage2cop.copy()
+                stage3 = stage3cop[i2]
+                stage3cop.remove(stage3)
+                for i3 in range(len(stage3cop)):
+                    stage4cop = stage3cop.copy()
+                    finalboss.append([stage1,stage2,stage3,stage4cop[i3]])
+    for option in finalboss:
+        count += 1
+        if pegs(option,Secretcode,algo_choice) == [4,0]:
+            print(f'Blijkbaar was {option} de geheime code!')
+            print(f'GGWP GAMER, het heeft {count} turns gekost')
+            with open('results.txt', "a") as f:  # append the results to a txt file, probably not in final product
+                f.write(f'{count}\n')
+                f.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
 startgame()

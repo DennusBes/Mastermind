@@ -248,20 +248,11 @@ def customstrat(Secretcode):
                     stage4cop = stage3cop.copy()
                     finalboss.append([stage1,stage2,stage3,stage4cop[i3]])
     for option in finalboss:
+        count+=1
         if pegs(option,Secretcode,algo_choice) == [4,0]:
             print(f'Blijkbaar was {option} de geheime code!')
             print(f'GGWP GAMER, het heeft {count} turns gekost')
             quit()
-
-
-
-
-
-
-
-
-
-
 
 
 startgame()
