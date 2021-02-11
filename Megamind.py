@@ -220,16 +220,43 @@ def customstrat(Secretcode):
         if totalamount>0:
             kleurenteller[posiblenumbas]=totalamount
         print(f'Guess {guess} feedback { feedback}')
-    print(kleurenteller)
-    usednumbers =[]
+    #print(kleurenteller)
+    usednumbers = []
     while len(usednumbers) < 4:
-        for i in range (kleurenteller):
-            if kleurenteller[i] 0
-                usednumbers.append(i)
-                kleurenteller[i] -= 1
+        for getal in kleurenteller:
+            if kleurenteller[getal] >=1:
+                usednumbers.append(getal)
+                kleurenteller[getal] -= 1
+    print(usednumbers)
 
-    #possibilities = [getal for getal in kleurenteller.keys() ]
-    print(possibilities)
+    stage1 = []
+    stage2 = []
+    stage3 = []
+    finalboss = []
+
+
+    for i0 in range(len(usednumbers)):
+        tempcop = usednumbers.copy()
+        stage1 =tempcop[i0]
+        tempcop.remove(stage1)
+        for i1 in range(len(tempcop)):
+            stage2cop=tempcop.copy()
+            stage2 = stage2cop[i1]
+            stage2cop.remove(stage2)
+            for i2 in range(len(stage2cop)):
+                stage3cop = stage2cop.copy()
+                stage3 = stage3cop[i2]
+                stage3cop.remove(stage3)
+                for i3 in range(len(stage3cop)):
+                    stage4cop = stage3cop.copy()
+                    finalboss.append([stage1,stage2,stage3,stage4cop[i3]])
+    for option in finalboss:
+        guess = option
+        if pegs(guess,Secretcode,algo_choice) == [4,0]:
+            print(f'Guess {guess}')
+            print('GGWP')
+            qw
+
 
 
 
