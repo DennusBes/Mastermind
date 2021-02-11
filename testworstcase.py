@@ -24,7 +24,6 @@ def startgame():
     algo_choice = int(input("Welk algorithme wil je gebruiken?\n0=user input, 1=worst case strategy, 2=simple strategy"))
     selectalgo(algo_choice)
 
-
 def selectalgo(algo_choice):
     # variable die aangeeft welk algoritme gebruikt word
     # waarde 0 = user input
@@ -106,8 +105,6 @@ def simplestrat(Secretcode):
         currentoption =[item for item in currentoption if item in checklst]
         print(f'Possible options left: {len(currentoption)}')
 
-
-
 def worstcasestrat(Secretcode):
     count = 0
     alloption = []
@@ -158,14 +155,11 @@ def worstcasestrat(Secretcode):
                 for y in currentoption:
                     tempfb = tuple(pegs(y,i,algo_choice))
                     temptuple = tuple(i)
-                    counter+=1
-                comboding = (tempfb,counter)
-                matrix={temptuple:comboding}
+                    comboding = (temptuple, tempfb)
+                    matrix = {comboding: counter}
+                    if comboding in matrix:
+                        matrix[counter]+=1
+
                 print(matrix)
-
-
-
-
-
 
 startgame()

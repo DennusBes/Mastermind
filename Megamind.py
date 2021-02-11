@@ -132,15 +132,9 @@ def worstcasestrat(Secretcode):
         quit()
 
     while True:
-        guess = currentoption[0]
-        count += 1
-        feedback = pegs(guess, Secretcode, algo_choice)
-        print(f'guess: {guess} feedback:{feedback}')
-
         # als de feedback [4,0] is, is het algoritme klaar
         if feedback == [4, 0]:
             print(f'GGWP GAMER, het heeft {count} turns gekost')
-            print(f'De code was {Secretcode}.')
             quit()
 
         # Hier wordt een lijst gemaakt waar alle mogelijke codes worden getest tegen de guess
@@ -155,25 +149,27 @@ def worstcasestrat(Secretcode):
         # de mogelijke opties  worden in de lijst geplaatst
         currentoption = [item for item in currentoption if item in checklst]
 
-        if len(currentoption)>1:
-            matrix={"Code":[],"Feedback":[],"Count":[]}# Dictionary waarin staat: [code],[feedback] , aantal keren dat die feedback gekregen is
+        if len(currentoption) > 1:
             for i in currentoption:
-                matrix["Count"] = 0
+                matrix={}
                 counter = 0
-                for y in currentoption:
-                    tempfb = tuple(pegs(y,i,algo_choice))
+                for y in alloption:
+                    tempfb = tuple(pegs(y, i, algo_choice))
+                    temptuple = tuple(i)
+                    comboding = (temptuple, tempfb)
 
-                    temptuple = tuple(i)                        #Lists mogen niet in dictionaries worden geplaatst als key, dus maak ik en tuple met de inhoud van i
-                    counter+=1
-                    matrix["Code"].append(temptuple)
-                    matrix["Feedback"].append(tempfb)
-                    matrix["Count"]=(counter)
-
-        #guess=listmatrix(temptuple) if count==kleinewaarde
-        print(f'{matrix["Code"]}, {matrix["Feedback"]}, {matrix["Count"]} \n')
-        kleinewaarde = min(count, key=matrix.get)
-        #print(kleinewaarde)
-        guess = [temptuple for d in matrix if count == kleinewaare]
-
+                    try:
+                        matrix[comboding] += 1
+                    except:
+                        matrix[comboding] = 1
+            minikey = min(matrix, key=matrix.get)
+            minikey = list(minikey[0])
+            print(minikey)
+            guess = minikey
+            count += 1
+            feedback = pegs(guess, Secretcode, algo_choice)
+            print(f'guess: {guess} feedback:{feedback}')
+        else:
+            guess=currentoption[0]
 
 startgame()
