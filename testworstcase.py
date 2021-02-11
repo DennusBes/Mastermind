@@ -88,13 +88,10 @@ def simplestrat(Secretcode):
         count += 1
         feedback = pegs(guess, Secretcode,algo_choice)
         print(f'Guess: {guess} Feedback:{feedback}')
-
         #als de feedback [4,0] is, is het algoritme klaar
         if feedback == [4,0]:
             print(f'\nGGWP GAMER, het heeft {count} turns gekost')
-
             quit()
-
         #Hier wordt een lijst gemaakt waar alle mogelijke codes worden getest tegen de guess
         checklst=[]
         for i0 in range(0, 6):
