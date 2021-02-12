@@ -19,18 +19,20 @@ def startgame():
         print(f'Dit is de code dmv userinpit {Secretcode}')
     #Gebruiker selecteerd optie: random generated geheime code
     elif howtocode ==1:
-        #hier word een list dat 4 willekeurige intergers bevat(0 tot 6) aangemaakt
+        #hier word een list dat 4 willekeurige intergers bevat(0 t/m 5) aangemaakt
         Secretcode = [random.randint(0,5) for i in range(4)]
         print(f'Dit is de code dmv random {Secretcode}')
+
+    # variable die aangeeft welk algoritme gebruikt word
     algo_choice = int(input("Welk algorithme wil je gebruiken?\n0=user input, 1=worst case strategy, 2=simple strategy, 3=Supercoole custom strat"))
     selectalgo(algo_choice)
 
 
 def selectalgo(algo_choice):
-    # variable die aangeeft welk algoritme gebruikt word
     # waarde 0 = user input
     # waarde 1 = worst case strategy
     # waarde 2 = simple strategy
+    # waarde 3 = custom strategy
     if algo_choice==0:
         breakit()
     elif algo_choice==1:
@@ -86,7 +88,7 @@ def simplestrat(Secretcode):
                     currentoption.append([i0, i1, i2, i3])
 
     while True:
-        #maak een gok met de eerst mogelijke optie uit een gesorteerde lijst
+        #maak een gok met de eerst mogelijke optie uit de lijst met mogelijke opties
         guess = currentoption[0]
         count += 1
         feedback = pegs(guess, Secretcode,algo_choice)
@@ -232,6 +234,7 @@ def customstrat(Secretcode):
     stage3 = []
     finalboss = []
 
+    # Hier worden alle mogelijk combinaties gemaakt, met de getallen uit  'Usednumbers' list
     for i0 in range(len(usednumbers)):
         tempcop = usednumbers.copy()
         stage1 =tempcop[i0]
